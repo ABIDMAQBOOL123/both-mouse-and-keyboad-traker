@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mouse Tracker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      #coordinates {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="startTracking()">Start Tracking</button>
+    <button onclick="stopTracking()">Stop Tracking</button>
+    <div id="coordinates"></div>
+
+    <script>
+      let tracking = false;
+
+      function startTracking() {
+        tracking = true;
+        document.querySelector("#coordinates").textContent = "Mouse Position: ";
+        document.querySelector("button:nth-of-type(1)").disabled = true;
+        document.querySelector("button:nth-of-type(2)").disabled = false;
+        document.addEventListener("mousemove", trackMouse);
+      }
+
+      function stopTracking() {
+        tracking = false;
+        document.querySelector("button:nth-of-type(1)").disabled = false;
+        document.querySelector("button:nth-of-type(2)").disabled = true;
+        document.removeEventListener("mousemove", trackMouse);
+      }
+
+      function trackMouse(event) {
+        if (tracking) {
+          const coordinates = document.querySelector("#coordinates");
+          const { clientX, clientY } = event;
+          coordinates.textContent = `Mouse Position: X=${clientX}, Y=${clientY}`;
+        }
+      }
+    </script>
+  </body>
+</html>
