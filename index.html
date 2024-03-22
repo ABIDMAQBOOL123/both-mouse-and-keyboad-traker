@@ -3,46 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mouse Tracker</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-      #coordinates {
-        margin-top: 20px;
-      }
-    </style>
+    <title>Mouse and Keyboard Activity Tracker</title>
   </head>
   <body>
-    <button onclick="startTracking()">Start Tracking</button>
-    <button onclick="stopTracking()">Stop Tracking</button>
-    <div id="coordinates"></div>
+    <h1>Mouse and Keyboard Activity Tracker</h1>
+    <p>Open the console to see idle time.</p>
 
     <script>
-      let tracking = false;
+      let lastActiveTime = Date.now();
+      let idleTime = 0;
 
-      function startTracking() {
-        tracking = true;
-        document.querySelector("#coordinates").textContent = "Mouse Position: ";
-        document.querySelector("button:nth-of-type(1)").disabled = true;
-        document.querySelector("button:nth-of-type(2)").disabled = false;
-        document.addEventListener("mousemove", trackMouse);
-      }
+      // Mouse activity tracking
+      document.addEventListener("mousemove", function () {
+        lastActiveTime = Date.now();
+      });
 
-      function stopTracking() {
-        tracking = false;
-        document.querySelector("button:nth-of-type(1)").disabled = false;
-        document.querySelector("button:nth-of-type(2)").disabled = true;
-        document.removeEventListener("mousemove", trackMouse);
-      }
+      document.addEventListener("mousedown", function () {
+        lastActiveTime = Date.now();
+      });
 
-      function trackMouse(event) {
-        if (tracking) {
-          const coordinates = document.querySelector("#coordinates");
-          const { clientX, clientY } = event;
-          coordinates.textContent = `Mouse Position: X=${clientX}, Y=${clientY}`;
+      // Keyboard activity tracking
+      document.addEventListener("keydown", function () {
+        lastActiveTime = Date.now();
+      });
+
+      document.addEventListener("keypress", function () {
+        lastActiveTime = Date.now();
+      });
+
+      // Check for idle time periodically
+      setInterval(function () {
+        const now = Date.now();
+        const diff = now - lastActiveTime;
+        if (diff > 300000) {
+          // 5 minutes in milliseconds
+          idleTime += diff;
+          console.log("Idle for", idleTime / 1000, "seconds");
         }
-      }
+      }, 1000); // Check every second
     </script>
   </body>
 </html>
